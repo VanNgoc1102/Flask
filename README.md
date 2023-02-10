@@ -27,9 +27,9 @@ docker-compose -f docker/docker-compose.yml up -d
 ## Url
 
 ```
-localhost:5000/get_info
-localhost:5000/process
-localhost:5000/write_info
-localhost:5000/sync_data
+localhost:80/get_info
+localhost:80/process
+localhost:80/write_info
+localhost:80/sync_data
 
 ```
