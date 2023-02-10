@@ -46,7 +46,6 @@ class YoutubeController:
         return(worksheet)
 
     def syncdata():    
-
         info = YoutubeController.get_data()
         data = YoutubeController.process_data(info)
         worksheet = YoutubeController.write_data_to_db(data)

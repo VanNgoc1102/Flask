@@ -1,11 +1,9 @@
-
-docker system prune
-docker system df
-
-## Run dockerfile: pwd: ~/Desktop/Workspace/Flask/flask_project
+## Run dockerfile: 
+```
 docker build -t pythonflask .
 docker run -d -p 80:5000 --name flask pythonflask
 docker rm -f flask
+```
 
 ## Install new package
 
