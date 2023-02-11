@@ -24,19 +24,20 @@ class YoutubeController:
         name = list(map(definition.names, definition.transfo(df,'First_name'), definition.transfo(df,'Last_name')))
         age = list(map(definition.age_pr, definition.transfo(df,'Born')))
         user_email = list(map(definition.process_user, definition.transfo(df,'Email')))
-        provice = list(map(definition.process_vice, definition.transfo(df,'Address')))
+        province = list(map(definition.process_vince, definition.transfo(df,'Address')))
         district  = list(map(definition.process_dis, definition.transfo(df,'Address')))
         note = list(map(definition.check_mail, definition.transfo(df,'Email')))
 
-        data = {'inserted_at': inserted,
-                'updated_at': updated,
-                'full_name': name,
-                'user_email': user_email,
-                'age': age,
-                'district': district,
-                'provice': provice,
-                'note': note,
-                }
+        data = {
+            'inserted_at': inserted,
+            'updated_at': updated,
+            'full_name': name,
+            'user_email': user_email,
+            'age': age,
+            'district': district,
+            'province': province,
+            'note': note
+        }
         return(data)
 
     def write_data_to_db(data):

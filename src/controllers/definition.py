@@ -37,7 +37,7 @@ class InfoDefinition:
         else:
             return None
 
-    def process_vice(adr:str):
+    def process_vince(adr:str):
         address = adr.split(",")
         return(address[-1])
 
