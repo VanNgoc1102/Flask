@@ -8,7 +8,7 @@ class DataSheet:
         self.sheet = None
 
     def open_work_sheet(self):   
-        self.sheet = self.gsheet_client.open(self.spreadsheet)
-        worksheet = self.sheet.worksheet('title', self.working_sheet)   
+        sheet = self.gsheet_client.open(self.spreadsheet)
+        worksheet = sheet.worksheet('title', self.working_sheet)   
         return worksheet
     

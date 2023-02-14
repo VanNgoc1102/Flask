@@ -14,23 +14,23 @@ decorator = token_required
 def index():
     return(" Hi! This's My Project! ")
 
-@app.route('/get_info',methods=["GET"])
+@app.route('/get_info', methods=["GET"])
 @decorator
 def getInfo():
     info = controller.get_data()
-    return jsonify({'Infomation':info})
+    return jsonify({'Infomation': info})
 
-@app.route('/info/<int:id>',methods=["GET"])
+@app.route('/info/<int:id>', methods=["GET"])
 @decorator
 def getInfoId(id):  
     info = controller.get_data()
-    return jsonify({'Infomation':info[id]})
+    return jsonify({'Infomation': info[id]})
 
-@app.route('/process',methods=["GET"])
+@app.route('/process', methods=["GET"])
 @decorator
 def process():
     data = controller.process_data()
-    return jsonify({'data':data})
+    return jsonify({'data': data})
 
 @app.route('/write_info', methods=["GET"])
 @decorator

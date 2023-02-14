@@ -45,6 +45,3 @@ class InfoDefinition:
         else:
             return address[-2].strip()
 
-    @staticmethod
-    def transfo(df, name: str) -> list:
-        return df.get(name).to_list()
