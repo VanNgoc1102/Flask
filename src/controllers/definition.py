@@ -2,7 +2,6 @@ from datetime import datetime, date
 import re
 
 class InfoDefinition:
-
     @staticmethod
     def names(first: str, last: str) -> str:
         return first +' '+ last

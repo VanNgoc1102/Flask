@@ -10,6 +10,7 @@ def token_required(func):
         with open('src/credentials/api_key.json', 'r') as file:
             api_file= json.load(file)
             key = api_file.get('X-Api-Key')
+        # access api key
         headers = request.headers
         auth = headers.get("X-Api-Key")
         if auth and auth == key:
