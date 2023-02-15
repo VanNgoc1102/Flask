@@ -7,7 +7,7 @@ class InfoDefinition:
         return first +' '+ last
 
     @staticmethod
-    def age(born: str) -> int:
+    def age_pr(born: str) -> int:
         born_date = datetime.strptime(born, "%d/%m/%Y").date()
         today = date.today()
         age = today.year - born_date.year
