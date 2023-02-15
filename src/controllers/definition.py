@@ -7,12 +7,14 @@ class InfoDefinition:
         return first +' '+ last
 
     @staticmethod
-    def age_pr(born: str) -> int:
-        born = datetime.strptime(born, "%d/%m/%Y").date()
+    def age(born: str) -> int:
+        born_date = datetime.strptime(born, "%d/%m/%Y").date()
         today = date.today()
-        return today.year - born.year - ((today.month, 
-                                        today.day) < (born.month, 
-                                                        born.day))
+        age = today.year - born_date.year
+        # Check if the birthday comes before today in this year
+        if (today.month, today.day) < (born_date.month, born_date.day):
+            age -= 1
+        return age
 
     @staticmethod
     def check_mail(email: str) -> bool:
