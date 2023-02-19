@@ -7,57 +7,45 @@ app = Flask(__name__)
 
 app.config["DEBUG"] = True
 
-controller = YoutubeController
+controller = YoutubeController()
 decorator = token_required
 
 @app.route('/')
 def index():
     return(" Hi! This's My Project! ")
 
-@app.route('/get_info',methods=["GET"])
+@app.route('/get_info', methods=["GET"])
 @decorator
 def getInfo():
     info = controller.get_data()
-    return jsonify({'Infomation':info})
+    return jsonify({'Infomation': info})
 
-@app.route('/info/<int:id>',methods=["GET"])
+@app.route('/info/<int:id>', methods=["GET"])
 @decorator
 def getInfoId(id):  
     info = controller.get_data()
-    return jsonify({'Infomation':info[id]})
+    return jsonify({'Infomation': info[id]})
 
-
-@app.route('/process',methods=["GET"])
+@app.route('/process', methods=["GET"])
 @decorator
 def process():
-    info = controller.get_data()
-    data = controller.process_data(info)
-    return jsonify({'data':data})
-
+    data = controller.process_data()
+    return jsonify({'data': data})
 
 @app.route('/write_info', methods=["GET"])
 @decorator
 def writeInfo():
-    info = controller.get_data()
-    data = controller.process_data(info)
-    worksheet = controller.write_data_to_db(data)
-    try:
-        if worksheet:
-            return ("connected !")
-    except:
-        return ("failed !")
-
+    worksheet = controller.write_data_to_db()
+    if worksheet:
+        return jsonify({"message": "connected"})
+    else:
+        return jsonify({"message": "failed"})
 
 @app.route('/sync_data', methods=["GET"])
 @decorator
 def syncData():    
-    works = controller.syncdata()
-    try:
-        if works:
-            return ("sync data success !")
-    except:
-        return ("sync data failed !")
-
+    sync = controller.syncdata()
+    return(sync)
 
 if __name__ == '__main__':
 	app.run(debug=True, host='0.0.0.0', port=5000)
