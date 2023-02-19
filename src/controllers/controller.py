@@ -52,12 +52,10 @@ class YoutubeController:
         return(worksheet)
 
     def syncdata(self):    
-        try:
-            self.get_data()
-            self.process_data()
-            self.write_data_to_db()
-        except:
-            return ({"message": "sync data failed !"})
+        self.get_data()
+        self.process_data()
+        self.write_data_to_db()
+        return ({"message": "sync data failed !"})
         return ({"message": "sync data success !"})
         
 
