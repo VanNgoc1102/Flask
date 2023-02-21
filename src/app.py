@@ -44,8 +44,8 @@ def writeInfo():
 @app.route('/sync_data', methods=["GET"])
 @decorator
 def syncData():    
-    sync = controller.syncdata()
-    return(sync)
+    controller.syncdata()
+    return jsonify({'message': 'sync complete.'})
 
 if __name__ == '__main__':
 	app.run(debug=True, host='0.0.0.0', port=5000)

@@ -19,27 +19,27 @@ class YoutubeController:
     def process_data(self):
         info = self.get_data()
         df = pd.DataFrame(info)
-        lists = ['First_name', 'Last_name', 'Email', 'Born', 'Address']
-        # convert 'Timestamp' to datetime
-        df['Timestamp'] = pd.to_datetime(df['Timestamp'], format='%d/%m/%Y %H:%M:%S').dt.strftime('%Y-%m-%d %H:%M:%S')
-        # group records by lists the value of 'inserted_at' and 'inserted_at'
-        df_new = df.groupby(lists).agg({'Timestamp': ['min', 'max']})
-        df_new.columns = ['inserted_at', 'updated_at']
-        df_new = df_new.reset_index()
-        # process and add new columns to df_new
-        df_new['full_name'] = df_new.apply(lambda row: definition.names(row['First_name'], row['Last_name']), axis=1)
-        df_new['user_email'] = df_new.apply(lambda row: definition.process_user(row['Email']), axis=1)
-        df_new['age'] = df_new.apply(lambda row: definition.age_pr(row['Born']), axis=1)
-        df_new['district'] = df_new.apply(lambda row: definition.process_dis(row['Address']), axis=1)
-        df_new['province'] = df_new.apply(lambda row: definition.process_vince(row['Address']), axis=1)
-        df_new['note'] = df_new.apply(lambda row: definition.check_mail(row['Email']), axis=1)
-        # delete columns  lists = ['First_name', 'Last_name', 'Email', 'Born', 'Address']
-        df_new = df_new.drop(columns=lists)
-        # # convert the dataframe to a JSON string 
-        json_str = df_new.to_json(orient='records',force_ascii=False)
-        # load json into Python
-        data = json.loads(json_str)
-        return(data)
+        lists = ['full_name', 'user_email', 'age', 'district', 'provice']
+        time = df.get('Timestamp').tolist()
+        full_name = df.apply(definition.full_name, axis=1).tolist()
+        user_email = df.apply(definition.process_user, axis=1).tolist()
+        age = df.apply(definition.age_pr, axis=1).tolist()
+        district = df.apply(definition.process_dis, axis=1).tolist()
+        provice = df.apply(definition.process_vince, axis=1).tolist()
+        note = df.apply(definition.check_mail, axis=1).tolist()
+        data = {
+                'time': time,
+                'full_name': full_name,
+                'user_email': user_email,
+                'age': age,
+                'district': district,
+                'provice': provice,
+                'note': note,
+                }
+        dff = pd.DataFrame(data)
+        merged_df = pd.merge(dff.drop_duplicates(subset=lists, keep='first'), dff.drop_duplicates(subset=lists, keep='last'),on=lists,how='outer',suffixes=['_inserted', '_updated'])
+        json_data = merged_df.to_dict('list')
+        return(json_data)
 
     def write_data_to_db(self):
         data = self.process_data()
@@ -55,8 +55,7 @@ class YoutubeController:
         self.get_data()
         self.process_data()
         self.write_data_to_db()
-        return ({"message": "sync data failed !"})
-        return ({"message": "sync data success !"})
+        
         
 
 
