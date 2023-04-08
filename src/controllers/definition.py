@@ -8,7 +8,7 @@ class InfoDefinition:
 
     @staticmethod
     def age_pr(born):
-        born_date = datetime.strptime(born.get('Born'), "%d/%m/%Y").date()
+        born_date = datetime.strptime(born.get('Born'), "%m/%d/%Y").date()
         today = date.today()
         age = today.year - born_date.year
         # Check if the birthday comes before today in this year
@@ -19,7 +19,7 @@ class InfoDefinition:
     @staticmethod
     def check_mail(email):
         pattern = r'\b[a-zA-Z0-9_.%+-]+@[A-Za-z0-9.-]+\.[a-z|A-Z]{2,4}\b'
-        matcher = re.search(pattern, email.get('Email'))
+        matcher = re.search(pattern, email.get('Email Address'))
         if matcher:
             return True
         else:
@@ -28,7 +28,7 @@ class InfoDefinition:
     @staticmethod
     def process_user(email):
         if InfoDefinition.check_mail(email):
-            tuples = re.findall(r'([\w\.-]+)@([\w\.-]+)', email.get('Email'))
+            tuples = re.findall(r'([\w\.-]+)@([\w\.-]+)', email.get('Email Address'))
             return tuples[0][0]
         else:
             return None

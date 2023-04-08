@@ -18,13 +18,13 @@ def index():
 @decorator
 def getInfo():
     info = controller.get_data()
-    return jsonify({'Infomation': info})
+    return jsonify({'Information': info})
 
 @app.route('/info/<int:id>', methods=["GET"])
 @decorator
 def getInfoId(id):  
     info = controller.get_data()
-    return jsonify({'Infomation': info[id]})
+    return jsonify({'Information': info[id]})
 
 @app.route('/process', methods=["GET"])
 @decorator

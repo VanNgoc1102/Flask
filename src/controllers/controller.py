@@ -10,7 +10,7 @@ definition = InfoDefinition()
 class YoutubeController:
     def get_data(self):
         # access DataSheet object with name "Information" and sheet name "List Data"
-        self.sheet = DataSheet('Infomation', 'List Data')
+        self.sheet = DataSheet('Information', 'List Data')
         worksheet = self.sheet.open_work_sheet()
         # get all records from googlesheet 
         info = worksheet.get_all_records()
@@ -18,43 +18,72 @@ class YoutubeController:
 
     def process_data(self):
         info = self.get_data()
-        df = pd.DataFrame(info)
-        lists = ['full_name', 'user_email', 'age', 'district', 'provice']
-        time = df.get('Timestamp').tolist()
+        df_info = pd.DataFrame(info)
+        df_info['Timestamp'] = pd.to_datetime(df_info['Timestamp'], format='%m/%d/%Y %H:%M:%S')
+        df_info = df_info.rename(columns={'Timestamp': 'create_at'})
+        df_info.insert(1, 'update_at', df_info['create_at'].copy())
+
+        self.sheet = DataSheet('Database', 'Data')
+        worksheet = self.sheet.open_work_sheet()
+        record = worksheet.get_all_records()
+        df_record = pd.DataFrame(record)
+
+        if df_record.empty:
+            df_record = df_info.head(1)
+        else:
+            time_df = df_record['update_at'].iloc[-1]  
+            df_new = df_info[df_info['create_at'] > time_df]
+                
+            for index1, value1 in df_new["Email Address"].iteritems():
+                if value1 in df_record["Email Address"].values:
+                    index2 = df_record.index[df_record['Email Address'] == value1].tolist()
+                    df_record.loc[index2, 'update_at'] = df_new.loc[index1, 'create_at']
+                else:
+                    new_row = df_new.loc[index1]
+                    df_record = df_record.append(new_row, ignore_index=True)
+
+        data = df_record.to_dict('list')
+        return(data)
+
+    def write_data_to_db(self):
+        data = self.process_data()
+        df = pd.DataFrame(data=data)
+        
+        create_at = df.get('create_at').tolist()
+        update_at = df.get('update_at').tolist()
         full_name = df.apply(definition.full_name, axis=1).tolist()
         user_email = df.apply(definition.process_user, axis=1).tolist()
         age = df.apply(definition.age_pr, axis=1).tolist()
         district = df.apply(definition.process_dis, axis=1).tolist()
         provice = df.apply(definition.process_vince, axis=1).tolist()
         note = df.apply(definition.check_mail, axis=1).tolist()
-        data = {
-                'time': time,
+        db = {
+                'create_at': create_at,
+                'update_at': update_at,
                 'full_name': full_name,
                 'user_email': user_email,
                 'age': age,
-                'district': district,
+                'district': district,                                                                   
                 'provice': provice,
                 'note': note,
                 }
-        dff = pd.DataFrame(data)
-        merged_df = pd.merge(dff.drop_duplicates(subset=lists, keep='first'), dff.drop_duplicates(subset=lists, keep='last'),on=lists,how='outer',suffixes=['_inserted', '_updated'])
-        json_data = merged_df.to_dict('list')
-        return(json_data)
-
-    def write_data_to_db(self):
-        data = self.process_data()
-        df = pd.DataFrame(data=data)
-        # access new DataSheet object with name "Database" and sheet name "Data"
-        self.sheet = DataSheet('Database', 'Data')
+        dff = pd.DataFrame(db)
+        
+        self.sheet = DataSheet('Database', 'DB')
         worksheet = self.sheet.open_work_sheet()
         # set data to googlesheet 
-        worksheet.set_dataframe(df,(1,1), escape_formulae=False) 
+        worksheet.set_dataframe(dff,(1,1), escape_formulae=False) 
         return(worksheet)
 
     def syncdata(self):    
-        self.get_data()
-        self.process_data()
-        self.write_data_to_db()
+        try:
+            self.get_data()
+            self.process_data()
+            self.write_data_to_db()
+            return ({"message": "sync data success !"})
+        except:
+            return ({"message": "sync data failed !"})
+            
         
         
 
