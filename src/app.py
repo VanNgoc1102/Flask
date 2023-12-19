@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 
-from controllers.controller import YoutubeController
-from security.security import token_required
+from src.controllers.controller import YoutubeController
+from src.security.security import token_required
 
 app = Flask(__name__)
 
@@ -18,13 +18,13 @@ def index():
 @decorator
 def getInfo():
     info = controller.get_data()
-    return jsonify({'Infomation': info})
+    return jsonify({'Information': info})
 
 @app.route('/info/<int:id>', methods=["GET"])
 @decorator
 def getInfoId(id):  
     info = controller.get_data()
-    return jsonify({'Infomation': info[id]})
+    return jsonify({'Information': info[id]})
 
 @app.route('/process', methods=["GET"])
 @decorator
@@ -44,8 +44,8 @@ def writeInfo():
 @app.route('/sync_data', methods=["GET"])
 @decorator
 def syncData():    
-    sync = controller.syncdata()
-    return(sync)
+    controller.syncdata()
+    return jsonify({'message': 'sync complete.'})
 
 if __name__ == '__main__':
 	app.run(debug=True, host='0.0.0.0', port=5000)

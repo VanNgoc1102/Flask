@@ -7,7 +7,7 @@ from flask import request, jsonify
 def token_required(func):
     @wraps(func)
     def decorator(*args, **kwargs):
-        with open('src/credentials/api_key.json', 'r') as file:
+        with open('/app/src/credentials/api_key.json', 'r') as file:
             api_file= json.load(file)
             key = api_file.get('X-Api-Key')
         # access api key
