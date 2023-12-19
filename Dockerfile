@@ -1,19 +1,16 @@
-FROM python:3.8.7
+FROM --platform=linux/amd64 python:3.8.7
+
 
 WORKDIR /app/
 
+RUN apt -y update \
+    && apt -y upgrade \
+    && apt install -y wget gnupg
+
+RUN pip install pipenv
 COPY Pipfile Pipfile.lock /app/
-
-RUN pip install pipenv && \
-    pipenv install --system --ignore-pipfile
-
-EXPOSE 5000
-
-ENTRYPOINT ["python"]
+RUN pipenv install --system --deploy --ignore-pipfile
 
 COPY . /app/
 
-CMD ["src/app.py"]
-
-
-
+CMD python3

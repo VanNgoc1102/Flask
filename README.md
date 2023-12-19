@@ -1,11 +1,12 @@
 ## Use
 ```
-copy api_key.json and credentials.json to /src/credentials/
+have api_key.json and credentials.json => /src/credentials/
 ```
-## Run dockerfile
+## Test
 
 ```
-copy api_key.json and credentials.json to /src/credentials/
+docker exec -it flask_app  pwd
+docker exec -it flask_app bash
 ```
 
 ## Run dockerfile
@@ -21,6 +22,9 @@ docker rm -f flask
 ```
 pip install pipenv
 pipenv install package_name
+docker system prune
+docker system df
+
 
 ```
 
@@ -31,15 +35,22 @@ docker-compose -f docker/docker-compose.yml build
 
 docker-compose -f docker/docker-compose.yml up -d
 
+docker-compose -f docker/docker-compose.yml up --build -d
+
+docker exec -t flask_app python3 -m src.app
 
 docker-compose -f docker/docker-compose.yml down
 
 ```
 
-## Url
+## Insomnia
 
 ```
 localhost:80/get_info
+Auth => API Key Auth 
+                    => KEY: X-Api-Key
+                       VALUE: ...............
+
 localhost:80/process
 localhost:80/write_info
 localhost:80/sync_data

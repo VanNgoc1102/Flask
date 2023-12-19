@@ -2,8 +2,8 @@ import json
 
 import pandas as pd
 
-from gsheet.sheet import DataSheet
-from controllers.definition import InfoDefinition
+from src.gsheet.sheet import DataSheet
+from src.controllers.definition import InfoDefinition
 
 definition = InfoDefinition()
 

@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 
-from controllers.controller import YoutubeController
-from security.security import token_required
+from src.controllers.controller import YoutubeController
+from src.security.security import token_required
 
 app = Flask(__name__)
 
