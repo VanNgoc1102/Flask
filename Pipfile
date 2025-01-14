@@ -7,9 +7,8 @@ name = "pypi"
 flask = "*"
 pandas = "*"
 pygsheets = "*"
-numpy = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.8.7"
+python_version = "3.10"

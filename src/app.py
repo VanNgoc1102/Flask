@@ -1,38 +1,43 @@
 from flask import Flask, jsonify
 
-from src.controllers.controller import YoutubeController
+from src.controllers.controller import InforController
 from src.security.security import token_required
 
 app = Flask(__name__)
 
 app.config["DEBUG"] = True
 
-controller = YoutubeController()
+controller = InforController()
 decorator = token_required
 
-@app.route('/')
-def index():
-    return(" Hi! This's My Project! ")
 
-@app.route('/get_info', methods=["GET"])
+@app.route("/")
+def index():
+    return " Hi! This's My Project! "
+
+
+@app.route("/get_info", methods=["GET"])
 @decorator
 def getInfo():
     info = controller.get_data()
-    return jsonify({'Information': info})
+    return jsonify({"Information": info})
 
-@app.route('/info/<int:id>', methods=["GET"])
+
+@app.route("/info/<int:id>", methods=["GET"])
 @decorator
-def getInfoId(id):  
+def getInfoId(id):
     info = controller.get_data()
-    return jsonify({'Information': info[id]})
+    return jsonify({"Information": info[id]})
 
-@app.route('/process', methods=["GET"])
+
+@app.route("/process", methods=["GET"])
 @decorator
 def process():
     data = controller.process_data()
-    return jsonify({'data': data})
+    return jsonify({"data": data})
 
-@app.route('/write_info', methods=["GET"])
+
+@app.route("/write_info", methods=["GET"])
 @decorator
 def writeInfo():
     worksheet = controller.write_data_to_db()
@@ -41,13 +46,13 @@ def writeInfo():
     else:
         return jsonify({"message": "failed"})
 
-@app.route('/sync_data', methods=["GET"])
+
+@app.route("/sync_data", methods=["GET"])
 @decorator
-def syncData():    
+def syncData():
     controller.syncdata()
-    return jsonify({'message': 'sync complete.'})
-
-if __name__ == '__main__':
-	app.run(debug=True, host='0.0.0.0', port=5000)
+    return jsonify({"message": "sync complete."})
 
 
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=5000)

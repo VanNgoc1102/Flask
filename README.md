@@ -1,6 +1,6 @@
 ## Use
 ```
-have api_key.json and credentials.json => /src/credentials/
+api_key.json & credentials.json => /src/credentials/
 ```
 ## Test
 
